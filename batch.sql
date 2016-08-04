@@ -107,5 +107,3 @@ ORDER BY td.td_error_notified, td.td_id
 
 select * from epay.transaction_status ts
 select * from epay.contract_actions ca
- 
- 

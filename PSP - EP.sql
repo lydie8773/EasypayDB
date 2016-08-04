@@ -43,6 +43,26 @@ inner join app_client ac on t.ac_id = ac.ac_id and ac.ac_id = pmc.ac_id
 where t.transact_id = '66387';
 
 
+/*Retrieving the transactions which use wechat pay*/
+select count(*) from epay.pmnt p
+inner join epay.transaction t on p.pmnt_id=t.pmnt_id
+inner join epay.transaction_status ts on ts.ts_id = t.ts_id
+where ts.ts_description = 'CAPTURE_SUCCESS'
+
+
+/*Retrieving the transactions which use wechat pay*/
+select p.pmnt_name,count(*)/(
+select count(*) from epay.pmnt p
+inner join epay.transaction t on p.pmnt_id=t.pmnt_id
+inner join epay.transaction_status ts on ts.ts_id = t.ts_id
+where ts.ts_description = 'CAPTURE_SUCCESS'
+) as "count" from epay.pmnt p
+inner join epay.transaction t on p.pmnt_id=t.pmnt_id
+inner join epay.transaction_status ts on ts.ts_id = t.ts_id
+where p.pmnt_name like 'WECHAT%'
+and ts.ts_description = 'CAPTURE_SUCCESS'
+group by p.pmnt_name
+
 
 
 
@@ -51,7 +71,9 @@ where t.transact_id = '66387';
 
 select * from payment_methods pm
 
-select * from payment_service_provider psp
+select * from epay.pmnt p
+where p.pmnt_name like 'WECHAT%'
+select * from epay.payment_service_provider psp
 
 select * from payment_client pc
 
